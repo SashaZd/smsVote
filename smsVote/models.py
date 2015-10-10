@@ -42,7 +42,7 @@ class SVPollingBooth(models.Model):
 		
 		electorate = []
 
-		voters = SVUser.objects.filter(assigned_to_user=self.id)
+		voters = SVUser.objects.filter(polling_Booth=self.id)
 		if voters and len(voters) > 0:
 			for voter in voters:
 				electorate.append(voter.getResponseData())

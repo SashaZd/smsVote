@@ -60,6 +60,17 @@ def getBooth(request, booth_id):
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+def boothSMS(request, booth_id):
+	if booth_id:
+		booths = SVPollingBooth.objects.filter(id=booth_id)
+
+		if len(booths)>0:
+			booth = booths[0]
+
+			
+
+
+
 
 
 
