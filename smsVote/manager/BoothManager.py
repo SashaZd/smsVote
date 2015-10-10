@@ -59,18 +59,26 @@ def getBooth(request, booth_id):
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-
+@csrf_exempt
 def boothSMS(request, booth_id):
+	booth_id = request.GET.get('booth_id','')
+	response_data = []
 	if booth_id:
 		booths = SVPollingBooth.objects.filter(id=booth_id)
 
 		if len(booths)>0:
 			booth = booths[0]
+			# response_data = booth.getResponseData()
+			users = booth.assigned_to_user.all()
+			for user in users:
+				#Code for sending SMS goes here
 
-			
+				#Response data with whatever response you want. I've currently listed out the users but you might want
+				#something like {success: true}
+				response_data.append(user.getResponseData())
 
-
-
+	# return HttpResponse(json.dumps({"success":True}), content_type="application/json")
+	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 

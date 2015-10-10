@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^api/booth/$', BoothManager.boothRequest, name='boothrequest'),
     url(r'^api/booth/(?P<booth_id>\d*)/$', BoothManager.boothRequest, name='boothGet'),
     
-    url(r'^api/booth/sms/$', BoothManager.boothSMS, name='boothrequest')
+    url(r'^api/booth/(?P<booth_id>\d*)/sms/$', BoothManager.boothSMS, name='boothSMS')
 )

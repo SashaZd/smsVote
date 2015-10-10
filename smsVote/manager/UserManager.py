@@ -38,17 +38,23 @@ def createUser(request):
 	user.phone_number = phone_number
 	# user.polling_Booth = polling_Booth
 
-	polling_Booths = None
-	polling_Booths = SVPollingBooth.objects.filter(booth_name=polling_Booth)
-	if len(polling_Booths)==0:
-		errorMessage = "Error! This booth doesn't exist."
-		return HttpResponse(json.dumps({'success': False, "error":errorMessage}), content_type="application/json")
+	booth = None
+	if polling_Booth:
+		booths = SVPollingBooth.objects.filter(id=polling_Booth)
 
-	user.polling_Booth = polling_Booths[0]
+		if len(booths)>0:
+			booth = booths[0]
+		else: 
+			errorMessage = "Error! This booth doesn't exist."
+			return HttpResponse(json.dumps({'success': False, "error":errorMessage}), content_type="application/json")
+
+	if booth is not None:
+		user.polling_Booth = booth
 
 	user.save()
 
 	response_data = user.getResponseData()
+	# response_data = SVPollingBooth.objects.filter(id=polling_Booth)
 	
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
