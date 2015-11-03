@@ -20,7 +20,7 @@ def createUser(request):
 	first_name = request.POST.get('first_name','')
 	last_name = request.POST.get('last_name','')
 	phone_number = request.POST.get('phone_number','')
-	polling_Booth = request.POST.get('polling_Booth','')
+	booth_id = request.POST.get('polling_booth','')
 
 	user = None
 	existing_users = SVUser.objects.filter(phone_number=phone_number)
@@ -39,17 +39,32 @@ def createUser(request):
 	# user.polling_Booth = polling_Booth
 
 	booth = None
-	if polling_Booth:
-		booths = SVPollingBooth.objects.filter(id=polling_Booth)
 
+	if booth_id:
+		booths = SVPollingBooth.objects.filter(id=booth_id)
 		if len(booths)>0:
 			booth = booths[0]
-		else: 
-			errorMessage = "Error! This booth doesn't exist."
-			return HttpResponse(json.dumps({'success': False, "error":errorMessage}), content_type="application/json")
 
-	if booth is not None:
+		else:
+			errorMessage = "Error! This booth doesn't exist."
+			return HttpResponse(json.dumps({'success': False, "error":errorMessage}), content_type="application/json")			
+	
+	if booth:
 		user.polling_Booth = booth
+
+
+	# booth = None
+	# if polling_Booth:
+	# 	booths = SVPollingBooth.objects.filter(id=polling_Booth)
+
+	# 	if len(booths)>0:
+	# 		booth = booths[0]
+	# 	else: 
+	# 		errorMessage = "Error! This booth doesn't exist."
+	# 		return HttpResponse(json.dumps({'success': False, "error":errorMessage}), content_type="application/json")
+
+	# if booth is not None:
+	# 	user.polling_Booth = booth
 
 	user.save()
 

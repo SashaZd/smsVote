@@ -20,7 +20,7 @@ class SVUser(models.Model):
 		response_data["first_name"] = self.first_name
 		response_data["last_name"] = self.last_name
 		response_data["phone_number"] = self.phone_number
-		response_data["polling_Booth"] = self.polling_Booth
+		response_data["polling_Booth"] = self.polling_Booth.booth_name
 
 		return response_data
 

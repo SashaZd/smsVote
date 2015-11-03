@@ -1,9 +1,20 @@
+from twilio.rest import TwilioRestClient 
+
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 
 from ..models import SVPollingBooth
+
+ 
+# put your own credentials here 
+ACCOUNT_SID = "ACa278bfe210d6abbb4a3ecfbc9c4f2ac4" 
+AUTH_TOKEN = "913df6a134de507a164f9704a568d136" 
+ 
+client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+
+
 
 
 @csrf_exempt
@@ -61,7 +72,29 @@ def getBooth(request, booth_id):
 
 @csrf_exempt
 def boothSMS(request, booth_id):
-	booth_id = request.GET.get('booth_id','')
+	# booth_id = request.GET.get('booth_id','')
+
+	print "---------in here"
+	client.messages.create(
+		# to="+14045286186", 
+		to="+14049804348", 
+		from_="+12563332672", 
+		body="Do not forget to vote at 123, 10th St. NW, Atlanta on November 4! We will remind you again a week before the polls open."
+	)
+	client.messages.create(
+		# to="+14045286186", 
+		to="+14049804348", 
+		from_="+12563332672", 
+		body="Want to remind a family member or friend to vote? Reply with their phone number and we will remind them, too"
+	)
+	client.messages.create(
+		# to="+14045286186", 
+		to="+14049804348", 
+		from_="+12563332672", 
+		body="Reply STOP to stop receiving these messages"
+	)
+
+
 	response_data = []
 	if booth_id:
 		booths = SVPollingBooth.objects.filter(id=booth_id)
@@ -70,14 +103,16 @@ def boothSMS(request, booth_id):
 			booth = booths[0]
 			# response_data = booth.getResponseData()
 			users = booth.assigned_to_user.all()
+			
+
 			for user in users:
 				#Code for sending SMS goes here
+				
 
 				#Response data with whatever response you want. I've currently listed out the users but you might want
 				#something like {success: true}
 				response_data.append(user.getResponseData())
 
-	# return HttpResponse(json.dumps({"success":True}), content_type="application/json")
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
